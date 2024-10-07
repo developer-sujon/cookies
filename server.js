@@ -10,8 +10,14 @@ app.use(cookieParser());
 
 // Configure CORS to allow frontend (127.0.0.1:3000) to make requests and receive cookies
 app.use(cors({
-  origin: ['https://magical-zabaione-f7ff83.netlify.app', 'https://836a-103-121-62-113.ngrok-free.app'], // Frontend domain
-  credentials: true, // Allow credentials (cookies)
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or Postman)
+    if (!origin) return callback(null, true);
+
+    // Allow all origins (but still allow credentials)
+    callback(null, true);
+  },
+  credentials: true, // Allow cookies and other credentials
 }));
 
 // Login route
